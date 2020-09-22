@@ -1,0 +1,77 @@
+/* CREATE DATABASE */
+CREATE DATABASE [LeilaoWeb]
+GO
+
+USE [LeilaoWeb]
+GO
+
+/* CREATE TABLE PEOPLE */
+CREATE TABLE [People](
+[PeopleId] int IDENTITY(1,1),
+[Name] varchar(50) not null,
+[Idade] int not null,
+CONSTRAINT [PK_People] PRIMARY KEY ([PeopleId]))
+GO
+
+/* CREATE TABLE PRODUCT */
+CREATE TABLE [Product](
+[ProductId] int IDENTITY(1,1),
+[Name] varchar(50) not null,
+[Value] decimal(18,2) not null,
+CONSTRAINT [PK_Product] PRIMARY KEY ([ProductId]))
+GO
+
+/* CREATE TABLE OFFER */
+CREATE TABLE [Offer] (
+[OfferId] int IDENTITY(1,1),
+[PeopleId] int not null,
+[ProductId] int not null,
+[Value] decimal(18,2) not null,
+CONSTRAINT [PK_Offer] PRIMARY KEY ([OfferId]),
+CONSTRAINT [FK_Offer_People_PeopleId] FOREIGN KEY ([PeopleId]) REFERENCES [People]([PeopleId]),
+CONSTRAINT [FK_Offer_Product_ProductId] FOREIGN KEY ([ProductId]) REFERENCES [Product]([ProductId]))
+GO
+
+/* INSERIR DADOS TABELA Produto */
+INSERT INTO [Product] ([Name], [Value]) VALUES ('Computador',1000)
+GO
+INSERT INTO [Product] ([Name], [Value]) VALUES ('Celular',500)
+GO
+INSERT INTO [Product] ([Name], [Value]) VALUES ('Notebook',900)
+GO
+INSERT INTO [Product] ([Name], [Value]) VALUES ('IPad',1500)
+GO
+
+/* INSERIR DADOS TABELA People */
+INSERT INTO [People] ([Name], [Idade]) VALUES ('João',30)
+GO
+INSERT INTO [People] ([Name], [Idade]) VALUES ('Maria',33)
+GO
+
+/* INSERIR DADOS TABELA Offer */
+INSERT INTO [Offer] ([PeopleId], [ProductId], [Value]) VALUES (1,2,800)
+GO
+INSERT INTO [Offer] ([PeopleId], [ProductId], [Value]) VALUES (2,2,850)
+Go
+INSERT INTO [Offer] ([PeopleId], [ProductId], [Value]) VALUES (1,2,860)
+GO
+INSERT INTO [Offer] ([PeopleId], [ProductId], [Value]) VALUES (2,2,1100)
+GO
+INSERT INTO [Offer] ([PeopleId], [ProductId], [Value]) VALUES (2,1,1000.99)
+GO
+INSERT INTO [Offer] ([PeopleId], [ProductId], [Value]) VALUES (1,4,1550)
+Go
+INSERT INTO [Offer] ([PeopleId], [ProductId], [Value]) VALUES (2,3,950)
+GO
+INSERT INTO [Offer] ([PeopleId], [ProductId], [Value]) VALUES (2,3,1000)
+Go
+INSERT INTO [Offer] ([PeopleId], [ProductId], [Value]) VALUES (2,3,1100)
+GO
+INSERT INTO [Offer] ([PeopleId], [ProductId], [Value]) VALUES (1,4,1600)
+GO
+
+/* SELECT -> LANCES DE UM PRODUTO */
+SELECT [Product].[Name] AS 'Produto', [People].[Name] AS 'User', [People].[Idade], [Offer].[Value] FROM (([Offer] 
+INNER JOIN [Product] ON [Product].[ProductId] = [Offer].[ProductId])
+INNER JOIN [People] ON [People].[PeopleId] = [Offer].[PeopleId])
+WHERE [Offer].[ProductId] = 3
